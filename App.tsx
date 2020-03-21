@@ -5,11 +5,15 @@ import MatterhornApiClient, { CounterResponse } from './api-client/MatterhornApi
 const apiBaseUrl = 'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com';
 const apiClient: MatterhornApiClient = new MatterhornApiClient(apiBaseUrl);
 
+import getEnvVars from './environment';
+const { message } = getEnvVars();
+
 export default function App() {
   const [count, setCount] = useState(0);
 
   return (
     <View style={styles.container}>
+      <Text>{message}</Text>
       <Text>Counter: {count}</Text>
       <Button onPress={() => retrieveCount(apiClient, setCount)} title="Click me"/>
     </View>
