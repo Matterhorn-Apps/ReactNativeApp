@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Blank Template (TypeScript)",
-    "slug": "MatterhornApp",
+    "name": "Matterhorn Prototype",
+    "slug": "matterhorn-prototype-react-native",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -23,7 +23,13 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "com.matterhorn.prototype_react_native",
+      "versionCode": 1
+    },
     "ios": {
+      "buildNumber": "0.1.0",
+      "bundleIdentifier": "com.matterhorn.prototype-react-native",
       "supportsTablet": true
     }
   }
