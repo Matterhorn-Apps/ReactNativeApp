@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, View, TouchableHighlight } from 'react-native';
 import styles from '../styles';
 
-
 export default function PocButton(props) {
     return (
         <View>
