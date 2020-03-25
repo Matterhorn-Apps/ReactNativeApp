@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import MatterhornApiClient, { CounterResponse } from './api-client/MatterhornApiClient';
 import PocButton from './poc/components/PocButton';
 import Spacer from './poc/components/Spacer';
-import styles from './poc/styles';
 
 const apiBaseUrl = 'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com';
 const apiClient: MatterhornApiClient = new MatterhornApiClient(apiBaseUrl);
@@ -23,7 +22,14 @@ export default function App() {
     </View>
   );
 }
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 function retrieveCount(api: MatterhornApiClient, setCount: React.Dispatch<React.SetStateAction<number>>) {
   api.Counter().then((value: CounterResponse) => {

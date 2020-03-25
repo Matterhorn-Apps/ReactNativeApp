@@ -1,16 +1,35 @@
 import React from 'react';
-import { Text, View, TouchableHighlight } from 'react-native';
-import styles from '../styles';
+import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 
 export default function PocButton(props) {
     return (
         <View>
-            {/* TODO: invoke function passed in on state */}
             <TouchableHighlight style={styles.button} onPress={props.onPress}>
-                <View>
                     <Text style={styles.buttonText}> {props.title}</Text>
-                </View>
             </TouchableHighlight>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 4,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    button: {
+        width: 150,
+        height: 50,
+        backgroundColor: 'skyblue'
+    },
+    buttonText: {
+        textAlign: 'center',
+        color: 'white',
+        padding: 15
+    },
+    spacer: {
+        width: 50,
+        height: 50
+    }
+});
