@@ -10,7 +10,7 @@ export default function PocButton(props: PocButtonInterface) {
     return (
         <View>
             <TouchableHighlight style={styles.button} onPress={props.onPress}>
-                    <Text style={styles.buttonText}> {props.title}</Text>
+                <Text style={styles.buttonText}> {props.title}</Text>
             </TouchableHighlight>
         </View>
     );
