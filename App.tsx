@@ -1,24 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import MatterhornApiClient, { CounterResponse } from './api-client/MatterhornApiClient';
+import PocButton from './components/PocButton';
+import getEnvVars from './environment';
 
 const apiBaseUrl = 'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com';
 const apiClient: MatterhornApiClient = new MatterhornApiClient(apiBaseUrl);
 
-import getEnvVars from './environment';
 const { message } = getEnvVars();
-
-export default function App() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <View style={styles.container}>
-      <Text>{message}</Text>
-      <Text>Counter: {count}</Text>
-      <Button onPress={() => retrieveCount(apiClient, setCount)} title="Click me"/>
-    </View>
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -26,7 +15,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }
 });
 
 function retrieveCount(api: MatterhornApiClient, setCount: React.Dispatch<React.SetStateAction<number>>) {
@@ -36,4 +25,16 @@ function retrieveCount(api: MatterhornApiClient, setCount: React.Dispatch<React.
     console.log('Request failed!');
     console.log(reason);
   });
+}
+
+export default function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <View style={styles.container}>
+      <Text>{message}</Text>
+      <Text>Counter: {count}</Text>
+      <PocButton title='Click Me' onPress={() => retrieveCount(apiClient, setCount)} />
+    </View>
+  );
 }

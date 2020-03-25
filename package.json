@@ -7,7 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "build": "tsc --project tsconfig.json",
-    "lint": "tslint --project tsconfig.json",
+    "lint": "eslint --fix",
     "test": "jest"
   },
   "dependencies": {
@@ -24,14 +24,18 @@
     "@types/node": "^13.9.2",
     "@types/react": "~16.9.0",
     "@types/react-native": "~0.60.23",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
     "babel-jest": "^25.1.0",
     "babel-preset-expo": "~8.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^2.5.1",
     "jest": "^25.1.0",
     "ts-jest": "^25.2.1",
-    "tslint": "^6.1.0",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-eslint-rules": "^5.4.0",
-    "tslint-react": "^4.2.0",
     "typescript": "~3.6.3"
   },
   "jest": {
