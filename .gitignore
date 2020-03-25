@@ -9,7 +9,9 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
-package-lock.json
 
 # macOS
 .DS_Store
+
+# Avoid accidentally commiting npm package-lock file - we are using yarn
+package-lock.json
