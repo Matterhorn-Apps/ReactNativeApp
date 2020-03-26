@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import MatterhornApiClient, { CounterResponse } from './api-client/MatterhornApiClient';
 import PocButton from './components/PocButton';
 import getEnvVars from './environment';
+import {useGetCounter, Counter} from './api-client/api-client'
+import { useGet } from "restful-react";
 
 const apiBaseUrl = 'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com';
 const apiClient: MatterhornApiClient = new MatterhornApiClient(apiBaseUrl);
@@ -30,10 +32,15 @@ function retrieveCount(api: MatterhornApiClient, setCount: React.Dispatch<React.
 export default function App() {
   const [count, setCount] = useState(0);
 
+  const { data: counter2 } = useGet({
+    path: "http://matterhornapiservice-env-dev.eba-qjezc5kq.us-east-1.elasticbeanstalk.com/counter",
+  });
+
+
   return (
     <View style={styles.container}>
       <Text>{message}</Text>
-      <Text>Counter: {count}</Text>
+      <Text>Counter: {counter2.Value}</Text>
       <PocButton title='Click Me' onPress={() => retrieveCount(apiClient, setCount)} />
     </View>
   );

@@ -73,7 +73,7 @@ export type UseGetCounterProps = Omit<UseGetProps<Counter, void>, "path">;
 /**
  * Get the current counter value and increment it
  */
-export const useGetCounter = (props: UseGetCounterProps) => useGet<Counter, unknown, void>(`/counter`, props);
+export const useGetCounter = (props: UseGetCounterProps) => useGet<Counter, unknown, void>(`http://matterhornapiservice-env-dev.eba-qjezc5kq.us-east-1.elasticbeanstalk.com/counter`, props);
 
 
 export type PostExerciseRecordProps = Omit<MutateProps<void, void, void, ExerciseRecord>, "path" | "verb"> & {userId: number};
