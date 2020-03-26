@@ -40,7 +40,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>{message}</Text>
-      <Text>Counter: {counter2.Value}</Text>
+      <Text>Counter: {counter2 ? counter2.Value : ''}</Text>
       <PocButton title='Click Me' onPress={() => retrieveCount(apiClient, setCount)} />
     </View>
   );
