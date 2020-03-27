@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import MatterhornApiClient, { CounterResponse } from './api-client/MatterhornApiClient';
 import PocButton from './components/PocButton';
 import getEnvVars from './environment';
+import PocPrompt from './components/PocPrompt';
 
 const apiBaseUrl = 'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com';
 const apiClient: MatterhornApiClient = new MatterhornApiClient(apiBaseUrl);
@@ -35,6 +36,7 @@ export default function App() {
       <Text>{message}</Text>
       <Text>Counter: {count}</Text>
       <PocButton title='Click Me' onPress={() => retrieveCount(apiClient, setCount)} />
+      <PocPrompt />
     </View>
   );
 }
