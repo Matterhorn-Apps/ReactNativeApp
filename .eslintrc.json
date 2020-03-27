@@ -25,6 +25,6 @@
     "rules": {
         "react/jsx-filename-extension": "off",
         "comma-dangle":["error", "never"],
-        "quotes":["error" , "single"]
+        "quotes":["error", "single"]
     }
 }

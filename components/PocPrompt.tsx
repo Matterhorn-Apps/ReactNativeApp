@@ -55,10 +55,9 @@ export default function PocPrompt() {
     );
   }
   return (
-    <View>
+    <View style={styles.container}>
       <TouchableWithoutFeedback onPress={toggleDisplayPrompt}>
         <Text>
-          {' '}
           Calorie Goal:
           {calorieGoal || ''}
         </Text>
