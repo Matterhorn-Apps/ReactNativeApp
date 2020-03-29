@@ -21,6 +21,13 @@ export interface BodyMetrics {
   age: number;
 }
 
+export interface CalorieGoal {
+  /**
+   * Target number of daily calories
+   */
+  calories: number;
+}
+
 export interface FoodRecord {
   /**
    * Calories in this food record
@@ -76,34 +83,15 @@ export type UseGetCounterProps = Omit<UseGetProps<Counter, void>, "path">;
 export const useGetCounter = (props: UseGetCounterProps) => useGet<Counter, unknown, void>(`/counter`, props);
 
 
-export type PostExerciseRecordProps = Omit<MutateProps<void, void, void, ExerciseRecord>, "path" | "verb"> & {userId: number};
-
-/**
- * Add a new exercise record
- */
-export const PostExerciseRecord = ({userId, ...props}: PostExerciseRecordProps) => (
-  <Mutate<void, void, void, ExerciseRecord>
-    verb="POST"
-    path={`/user/${userId}/exercise`}
-    {...props}
-  />
-);
-
-export type UsePostExerciseRecordProps = Omit<UseMutateProps<void, void, ExerciseRecord>, "path" | "verb"> & {userId: number};
-
-/**
- * Add a new exercise record
- */
-export const usePostExerciseRecord = ({userId, ...props}: UsePostExerciseRecordProps) => useMutate<void, void, void, ExerciseRecord>("POST", `/user/${userId}/exercise`, props);
-
-
 export interface GetExerciseRecordsQueryParams {
   /**
-   * Start of the date-time range associated with requested exercise records
+   * Start of the date-time range associated with requested exercise
+   * records
    */
   startDateTime: string;
   /**
-   * End of the date-time range associated with requested exercise records
+   * End of the date-time range associated with requested exercise
+   * records
    */
   endDateTime: string;
 }
@@ -128,25 +116,25 @@ export type UseGetExerciseRecordsProps = Omit<UseGetProps<ExerciseRecord[], GetE
 export const useGetExerciseRecords = ({userId, ...props}: UseGetExerciseRecordsProps) => useGet<ExerciseRecord[], void, GetExerciseRecordsQueryParams>(`/user/${userId}/exercise`, props);
 
 
-export type PostFoodRecordProps = Omit<MutateProps<void, void, void, FoodRecord>, "path" | "verb"> & {userId: number};
+export type PostExerciseRecordProps = Omit<MutateProps<void, void, void, ExerciseRecord>, "path" | "verb"> & {userId: number};
 
 /**
- * Add a new food record
+ * Add a new exercise record
  */
-export const PostFoodRecord = ({userId, ...props}: PostFoodRecordProps) => (
-  <Mutate<void, void, void, FoodRecord>
+export const PostExerciseRecord = ({userId, ...props}: PostExerciseRecordProps) => (
+  <Mutate<void, void, void, ExerciseRecord>
     verb="POST"
-    path={`/user/${userId}/food`}
+    path={`/user/${userId}/exercise`}
     {...props}
   />
 );
 
-export type UsePostFoodRecordProps = Omit<UseMutateProps<void, void, FoodRecord>, "path" | "verb"> & {userId: number};
+export type UsePostExerciseRecordProps = Omit<UseMutateProps<void, void, ExerciseRecord>, "path" | "verb"> & {userId: number};
 
 /**
- * Add a new food record
+ * Add a new exercise record
  */
-export const usePostFoodRecord = ({userId, ...props}: UsePostFoodRecordProps) => useMutate<void, void, void, FoodRecord>("POST", `/user/${userId}/food`, props);
+export const usePostExerciseRecord = ({userId, ...props}: UsePostExerciseRecordProps) => useMutate<void, void, void, ExerciseRecord>("POST", `/user/${userId}/exercise`, props);
 
 
 export interface GetFoodRecordsQueryParams {
@@ -180,45 +168,86 @@ export type UseGetFoodRecordsProps = Omit<UseGetProps<FoodRecord[], GetFoodRecor
 export const useGetFoodRecords = ({userId, ...props}: UseGetFoodRecordsProps) => useGet<FoodRecord[], void, GetFoodRecordsQueryParams>(`/user/${userId}/food`, props);
 
 
-export type PutCalorieGoalProps = Omit<MutateProps<void, void, void, number>, "path" | "verb"> & {userId: number};
+export type PostFoodRecordProps = Omit<MutateProps<void, void, void, FoodRecord>, "path" | "verb"> & {userId: number};
+
+/**
+ * Add a new food record
+ */
+export const PostFoodRecord = ({userId, ...props}: PostFoodRecordProps) => (
+  <Mutate<void, void, void, FoodRecord>
+    verb="POST"
+    path={`/user/${userId}/food`}
+    {...props}
+  />
+);
+
+export type UsePostFoodRecordProps = Omit<UseMutateProps<void, void, FoodRecord>, "path" | "verb"> & {userId: number};
+
+/**
+ * Add a new food record
+ */
+export const usePostFoodRecord = ({userId, ...props}: UsePostFoodRecordProps) => useMutate<void, void, void, FoodRecord>("POST", `/user/${userId}/food`, props);
+
+
+export type GetCalorieGoalProps = Omit<GetProps<CalorieGoal, void, void>, "path"> & {userId: number};
+
+/**
+ * Get the calorie goal for the user
+ */
+export const GetCalorieGoal = ({userId, ...props}: GetCalorieGoalProps) => (
+  <Get<CalorieGoal, void, void>
+    path={`/user/${userId}/calorieGoal`}
+    {...props}
+  />
+);
+
+export type UseGetCalorieGoalProps = Omit<UseGetProps<CalorieGoal, void>, "path"> & {userId: number};
+
+/**
+ * Get the calorie goal for the user
+ */
+export const useGetCalorieGoal = ({userId, ...props}: UseGetCalorieGoalProps) => useGet<CalorieGoal, void, void>(`/user/${userId}/calorieGoal`, props);
+
+
+export type PutCalorieGoalProps = Omit<MutateProps<void, void, void, CalorieGoal>, "path" | "verb"> & {userId: number};
 
 /**
  * Update the calorie goal for the user
  */
 export const PutCalorieGoal = ({userId, ...props}: PutCalorieGoalProps) => (
-  <Mutate<void, void, void, number>
+  <Mutate<void, void, void, CalorieGoal>
     verb="PUT"
     path={`/user/${userId}/calorieGoal`}
     {...props}
   />
 );
 
-export type UsePutCalorieGoalProps = Omit<UseMutateProps<void, void, number>, "path" | "verb"> & {userId: number};
+export type UsePutCalorieGoalProps = Omit<UseMutateProps<void, void, CalorieGoal>, "path" | "verb"> & {userId: number};
 
 /**
  * Update the calorie goal for the user
  */
-export const usePutCalorieGoal = ({userId, ...props}: UsePutCalorieGoalProps) => useMutate<void, void, void, number>("PUT", `/user/${userId}/calorieGoal`, props);
+export const usePutCalorieGoal = ({userId, ...props}: UsePutCalorieGoalProps) => useMutate<void, void, void, CalorieGoal>("PUT", `/user/${userId}/calorieGoal`, props);
 
 
-export type GetCalorieGoalProps = Omit<GetProps<number, void, void>, "path"> & {userId: number};
+export type GetMetricsProps = Omit<GetProps<BodyMetrics, void, void>, "path"> & {userId: number};
 
 /**
- * Get the calorie goal for the user
+ * Get the body metrics for the user
  */
-export const GetCalorieGoal = ({userId, ...props}: GetCalorieGoalProps) => (
-  <Get<number, void, void>
-    path={`/user/${userId}/calorieGoal`}
+export const GetMetrics = ({userId, ...props}: GetMetricsProps) => (
+  <Get<BodyMetrics, void, void>
+    path={`/user/${userId}/metrics`}
     {...props}
   />
 );
 
-export type UseGetCalorieGoalProps = Omit<UseGetProps<number, void>, "path"> & {userId: number};
+export type UseGetMetricsProps = Omit<UseGetProps<BodyMetrics, void>, "path"> & {userId: number};
 
 /**
- * Get the calorie goal for the user
+ * Get the body metrics for the user
  */
-export const useGetCalorieGoal = ({userId, ...props}: UseGetCalorieGoalProps) => useGet<number, void, void>(`/user/${userId}/calorieGoal`, props);
+export const useGetMetrics = ({userId, ...props}: UseGetMetricsProps) => useGet<BodyMetrics, void, void>(`/user/${userId}/metrics`, props);
 
 
 export type PutMetricsProps = Omit<MutateProps<void, void, void, BodyMetrics>, "path" | "verb"> & {userId: number};
@@ -240,24 +269,4 @@ export type UsePutMetricsProps = Omit<UseMutateProps<void, void, BodyMetrics>, "
  * Update body metrics for the user
  */
 export const usePutMetrics = ({userId, ...props}: UsePutMetricsProps) => useMutate<void, void, void, BodyMetrics>("PUT", `/user/${userId}/metrics`, props);
-
-
-export type GetMetricsProps = Omit<GetProps<BodyMetrics, void, void>, "path"> & {userId: number};
-
-/**
- * Get the body metrics for the user
- */
-export const GetMetrics = ({userId, ...props}: GetMetricsProps) => (
-  <Get<BodyMetrics, void, void>
-    path={`/user/${userId}/metrics`}
-    {...props}
-  />
-);
-
-export type UseGetMetricsProps = Omit<UseGetProps<BodyMetrics, void>, "path"> & {userId: number};
-
-/**
- * Get the body metrics for the user
- */
-export const useGetMetrics = ({userId, ...props}: UseGetMetricsProps) => useGet<BodyMetrics, void, void>(`/user/${userId}/metrics`, props);
 
