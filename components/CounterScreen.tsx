@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
 import MatterhornApiClient, { CounterResponse } from '../api-client/MatterhornApiClient';
+import { RootNavParamList } from '../App';
 
 import getEnvVars from '../environment';
 import PocButton from './PocButton';
@@ -26,7 +28,16 @@ function retrieveCount(api: MatterhornApiClient, setCount: React.Dispatch<React.
   });
 }
 
-export default function CounterScreen({ navigation }) {
+type CounterScreenNavigationProp = MaterialTopTabNavigationProp<
+  RootNavParamList,
+  'Counter'
+>;
+
+type CounterScreenProps = {
+  navigation: CounterScreenNavigationProp;
+};
+
+export default function CounterScreen(props: CounterScreenProps) {
   const [count, setCount] = useState(-1);
   const [loading, setLoading] = useState(false);
 

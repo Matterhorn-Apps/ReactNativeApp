@@ -10,12 +10,12 @@ import CounterScreen from './components/CounterScreen';
  * with mappings for route name to the params of the route.
  * https://reactnavigation.org/docs/typescript
  */
-type RootStackParamList = {
+export type RootNavParamList = {
   Home: undefined;
-  Secondary: undefined;
+  Counter: undefined;
 };
 
-const Tab = createMaterialTopTabNavigator<RootStackParamList>();
+const Tab = createMaterialTopTabNavigator<RootNavParamList>();
 
 function App() {
   return (
