@@ -1,42 +1,61 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import MatterhornApiClient, { CounterResponse } from './api-client/MatterhornApiClient';
-import PocButton from './components/PocButton';
-import getEnvVars from './environment';
-import PocPrompt from './components/PocPrompt';
+import * as React from 'react';
+import { Button, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-const apiBaseUrl = 'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com';
-const apiClient: MatterhornApiClient = new MatterhornApiClient(apiBaseUrl);
-
-const { message } = getEnvVars();
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-});
-
-function retrieveCount(api: MatterhornApiClient, setCount: React.Dispatch<React.SetStateAction<number>>) {
-  api.Counter().then((value: CounterResponse) => {
-    setCount(value.Value);
-  }).catch((reason) => {
-    console.log('Request failed!');
-    console.log(reason);
-  });
-}
-
-export default function App() {
-  const [count, setCount] = useState(0);
-
+function HomeScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Text>{message}</Text>
-      <Text>Counter: {count}</Text>
-      <PocButton title='Click Me' onPress={() => retrieveCount(apiClient, setCount)} />
-      <PocPrompt />
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+      <Button
+        title="Go to Details"
+        onPress={() => navigation.navigate('Details')}
+      />
     </View>
   );
 }
+
+function DetailsScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+      <Button
+        title="Go to Home"
+        onPress={() => navigation.navigate('Home')}
+      />
+    </View>
+  );
+}
+
+/**
+ * To type check our route name and params, we need to create an object type
+ * with mappings for route name to the params of the route.
+ * https://reactnavigation.org/docs/typescript
+ */
+type RootStackParamList = {
+  Home: undefined;
+  Details: undefined;
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Home' }}
+        />
+        <Stack.Screen
+          name="Details"
+          component={DetailsScreen}
+          options={{ title: 'Details' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
