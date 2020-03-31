@@ -1,31 +1,9 @@
 import * as React from 'react';
-import { Button, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
-    </View>
-  );
-}
-
-function DetailsScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to Home"
-        onPress={() => navigation.navigate('Home')}
-      />
-    </View>
-  );
-}
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import HomeScreen from './components/HomeScreen';
+import CounterScreen from './components/CounterScreen';
 
 /**
  * To type check our route name and params, we need to create an object type
@@ -34,26 +12,33 @@ function DetailsScreen({ navigation }) {
  */
 type RootStackParamList = {
   Home: undefined;
-  Details: undefined;
+  Secondary: undefined;
 };
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Tab = createMaterialTopTabNavigator<RootStackParamList>();
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen
+      <Tab.Navigator
+        initialRouteName="Home"
+        tabBarOptions={{
+          labelStyle: { fontSize: 12 },
+          tabStyle: { marginTop: 30 },
+          style: { backgroundColor: 'powderblue' }
+        }}
+      >
+        <Tab.Screen
           name="Home"
           component={HomeScreen}
           options={{ title: 'Home' }}
         />
-        <Stack.Screen
-          name="Details"
-          component={DetailsScreen}
-          options={{ title: 'Details' }}
+        <Tab.Screen
+          name="Counter"
+          component={CounterScreen}
+          options={{ title: 'Counter' }}
         />
-      </Stack.Navigator>
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
