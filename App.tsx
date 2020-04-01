@@ -1,19 +1,15 @@
-import React, { useState } from 'react';
-import {
-  StyleSheet, Text, View, Button
-} from 'react-native';
-import { AuthSession } from 'expo';
+import React, { useState, useEffect } from 'react';
+import { AuthSession, AppLoading } from 'expo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useFonts } from '@use-expo/font';
 
-import MatterhornApiClient, { CounterResponse } from './api-client/MatterhornApiClient';
-
+import { Spinner, View } from 'native-base';
 import CounterScreen from './components/CounterScreen';
 import HomeScreen from './components/HomeScreen';
-import PocButton from './components/PocButton';
-import PocPrompt from './components/PocPrompt';
-
 import getEnvVars from './environment';
+
+const { auth0ClientId, auth0Domain, enableAuth } = getEnvVars();
 
 /**
  * To type check our route name and params, we need to create an object type
@@ -25,51 +21,46 @@ export type RootNavParamList = {
   Counter: undefined;
 };
 
-const auth0ClientId = '0ngrMLtiiqOeY7ADbMSOq71tYb50LiUc';
-const auth0Domain = 'https://matterhorn-prototype.auth0.com';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});
-
-function retrieveCount(api: MatterhornApiClient, setCount: React.Dispatch<React.SetStateAction<number>>) {
-  api.Counter().then((value: CounterResponse) => {
-    setCount(value.Value);
-  }).catch((reason) => {
-    console.log('Request failed!');
-    console.log(reason);
-  });
-}
-
-async function openAuth(setAuthResult: React.Dispatch<any>) {
+async function openAuth(setUserToken: React.Dispatch<string>) {
   const redirectUrl = encodeURIComponent(AuthSession.getRedirectUrl());
   console.log(`redirectUrl: ${redirectUrl}`);
   const authUrl = `${auth0Domain}/authorize?response_type=token&client_id=${auth0ClientId}&redirect_uri=${redirectUrl}&prompt=login`;
   console.log(`authUrl: ${authUrl}`);
   const result: any = await AuthSession.startAsync({ authUrl });
-  setAuthResult(result.params.access_token);
-}
-
-async function logout(setAuthResult: React.Dispatch<any>) {
-  if (!__DEV__) {
-    AuthSession.dismiss();
-  }
-
-  setAuthResult('');
+  setUserToken(result.params.access_token);
 }
 
 export default function App() {
-  const [count, setCount] = useState(0);
-  const [authResult, setAuthResult] = useState('');
+  const [userToken, setUserToken] = useState<string>(enableAuth ? null : 'FAKE_TOKEN');
+
+  const [fontsLoaded] = useFonts({
+    Roboto: require('native-base/Fonts/Roboto.ttf'),
+    Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf')
+  });
+
+  useEffect(() => {
+    if (userToken === null) {
+      openAuth(setUserToken);
+    }
+  });
+
   const Tab = createMaterialTopTabNavigator<RootNavParamList>();
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
+  if (userToken === null) {
+    return (
+      <View>
+        <Spinner />
+      </View>
+    );
+  }
+
+  return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName="Home"
         tabBarOptions={{
           labelStyle: { fontSize: 12 },
           tabStyle: { marginTop: 30 },
