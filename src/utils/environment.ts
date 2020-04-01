@@ -4,7 +4,7 @@
  * This enables us to configure values specific to running the app in development, staging, or production environments.
  */
 
-import Constants from "expo-constants";
+import Constants from 'expo-constants';
 
 const ENV = {
   dev: {
@@ -25,9 +25,9 @@ const getEnvVars = (env = Constants.manifest.releaseChannel) => {
   // __DEV__ is true when run locally, but false when published.
   if (__DEV__) {
     return ENV.dev;
-  } else if (env === 'staging') {
+  } if (env === 'staging') {
     return ENV.staging;
-  } else if (env === 'prod') {
+  } if (env === 'prod') {
     return ENV.prod;
   }
 };
