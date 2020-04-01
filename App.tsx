@@ -16,7 +16,7 @@ const { auth0ClientId, auth0Domain, enableAuth } = getEnvVars();
  * with mappings for route name to the params of the route.
  * https://reactnavigation.org/docs/typescript
  */
-export type RootNavParamList = {
+type RootNavParamList = {
   Home: undefined;
   Counter: undefined;
 };
