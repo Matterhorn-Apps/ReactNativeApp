@@ -32,6 +32,7 @@
       "buildNumber": "0.1.0",
       "bundleIdentifier": "com.matterhorn.prototype-react-native",
       "supportsTablet": true
-    }
+    },
+    "scheme": "matterhorn-prototype-react-native"
   }
 }
