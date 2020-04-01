@@ -1,5 +1,6 @@
 {
   "expo": {
+    "entryPoint": "./src/App.tsx",
     "name": "Matterhorn Prototype",
     "slug": "matterhorn-prototype-react-native",
     "privacy": "public",
