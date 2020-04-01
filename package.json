@@ -7,7 +7,8 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "build": "tsc --project tsconfig.json",
-    "lint": "eslint --fix .",
+    "generate-api-client": "restful-react import --url https://raw.githubusercontent.com/Matterhorn-Apps/MatterhornApiSpec/master/specs/0.1.0.yaml --output src/api-client/api-client.tsx",
+    "lint": "eslint src/* --ext .js,.jsx,.ts,.tsx  --fix",
     "test": "jest"
   },
   "dependencies": {
@@ -24,7 +25,8 @@
     "react-native-safe-area-context": "0.6.0",
     "react-native-screens": "2.0.0-alpha.12",
     "react-native-tab-view": "^2.13.0",
-    "react-native-web": "~0.11.7"
+    "react-native-web": "~0.11.7",
+    "restful-react": "10.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
