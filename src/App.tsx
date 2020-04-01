@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { AuthSession, AppLoading } from 'expo';
+import React, { useEffect, useState } from 'react';
+import { AuthSession, AppLoading, registerRootComponent } from 'expo';
 import { NavigationContainer } from '@react-navigation/native';
+import { RestfulProvider } from 'restful-react';
+
+import { Spinner, View } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useFonts } from '@use-expo/font';
 
-import { Spinner, View } from 'native-base';
-import CounterScreen from './components/CounterScreen';
-import HomeScreen from './components/HomeScreen';
-import getEnvVars from './environment';
+import CounterScreen from './views/CounterScreen';
+import MainScreen from './views/MainScreen';
+import getEnvVars from './utils/environment';
 
-const { auth0ClientId, auth0Domain, enableAuth } = getEnvVars();
+const {
+  apiUrl, auth0ClientId, auth0Domain, enableAuth
+} = getEnvVars();
 
 /**
  * To type check our route name and params, we need to create an object type
@@ -17,7 +21,7 @@ const { auth0ClientId, auth0Domain, enableAuth } = getEnvVars();
  * https://reactnavigation.org/docs/typescript
  */
 type RootNavParamList = {
-  Home: undefined;
+  Main: undefined;
   Counter: undefined;
 };
 
@@ -30,7 +34,7 @@ async function openAuth(setUserToken: React.Dispatch<string>) {
   setUserToken(result.params.access_token);
 }
 
-export default function App() {
+function App() {
   const [userToken, setUserToken] = useState<string>(enableAuth ? null : 'FAKE_TOKEN');
 
   const [fontsLoaded] = useFonts({
@@ -59,25 +63,30 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        tabBarOptions={{
-          labelStyle: { fontSize: 12 },
-          tabStyle: { marginTop: 30 },
-          style: { backgroundColor: 'powderblue' }
-        }}
-      >
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'Home' }}
-        />
-        <Tab.Screen
-          name="Counter"
-          component={CounterScreen}
-          options={{ title: 'Counter' }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <RestfulProvider base={apiUrl}>
+      <NavigationContainer>
+        <Tab.Navigator
+          initialRouteName="Main"
+          tabBarOptions={{
+            labelStyle: { fontSize: 12 },
+            tabStyle: { marginTop: 30 },
+            style: { backgroundColor: 'powderblue' }
+          }}
+        >
+          <Tab.Screen
+            name="Main"
+            component={MainScreen}
+            options={{ title: 'Main' }}
+          />
+          <Tab.Screen
+            name="Counter"
+            component={CounterScreen}
+            options={{ title: 'Counter' }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </RestfulProvider>
   );
 }
+
+export default registerRootComponent(App);
