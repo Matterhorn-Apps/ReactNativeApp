@@ -25,26 +25,34 @@ type RootNavParamList = {
   Counter: undefined;
 };
 
-async function openAuth(setUserToken: React.Dispatch<string>) {
-  const redirectUrl = encodeURIComponent(AuthSession.getRedirectUrl());
-  console.log(`redirectUrl: ${redirectUrl}`);
-  const authUrl = `${auth0Domain}/authorize?response_type=token&client_id=${auth0ClientId}&redirect_uri=${redirectUrl}&prompt=login`;
-  console.log(`authUrl: ${authUrl}`);
-  const result: any = await AuthSession.startAsync({ authUrl });
-  setUserToken(result.params.access_token);
-}
 
 function App() {
   const [userToken, setUserToken] = useState<string>(enableAuth ? null : 'FAKE_TOKEN');
+  const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
 
   const [fontsLoaded] = useFonts({
     Roboto: require('native-base/Fonts/Roboto.ttf'),
     Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf')
   });
 
+  const signIn = async () => {
+    setIsLoggingIn(true);
+    const redirectUrl = encodeURIComponent(AuthSession.getRedirectUrl());
+    console.log(redirectUrl);
+    const authUrl = `${auth0Domain}/authorize?response_type=token&client_id=${auth0ClientId}&redirect_uri=${redirectUrl}&prompt=login`;
+    console.log(authUrl);
+    const result: any = await AuthSession.startAsync({ authUrl });
+    console.log(result);
+    setUserToken(result.params.access_token);
+    setIsLoggingIn(false);
+  };
+
   useEffect(() => {
-    if (userToken === null) {
-      openAuth(setUserToken);
+    // Wait until font resources are loaded before redirecting to sign in.
+    // This helps avoid incorrect behavior when triggering the auth flow before
+    // AppState has initialized. (https://github.com/expo/expo/pull/6743)
+    if (fontsLoaded && !isLoggingIn && userToken === null) {
+      signIn();
     }
   });
 
