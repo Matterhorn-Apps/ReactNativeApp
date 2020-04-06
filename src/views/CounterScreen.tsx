@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { gql } from 'apollo-boost';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import PocButton from '../components/PocButton';
-import { useGetCounter } from '../api-client/api-client';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,16 +15,45 @@ const styles = StyleSheet.create({
 });
 
 export default function CounterScreen() {
-  const { data: counter, refetch: refetchCounter } = useGetCounter({});
+  // const { data: counter, refetch: refetchCounter } = useGetCounter({});
+
+  const GET_COUNTER = gql`
+  query counter {
+      counter(id: 1) {
+        id
+        value
+      }
+    }
+  `;
+
+  const INCREMENT_COUNTER = gql`
+    mutation incrementCounter($id: ID!) {      
+        incrementCounter(id: $id) {
+          id
+          value
+        }      
+    }
+  `;
+
+  const { loading, data } = useQuery(GET_COUNTER);
+  const [incrementCounter] = useMutation(INCREMENT_COUNTER,
+    {
+      update(cache, { data: { counterUpdate } }) {
+        cache.writeQuery({
+          query: GET_COUNTER,
+          data: { counter: counterUpdate }
+        });
+      }
+    });
 
   return (
     <View style={styles.container}>
       <Text>
         Counter:
         {' '}
-        {counter && counter.Value }
+        { data && data.counter.value }
       </Text>
-      <PocButton title="+1" onPress={refetchCounter} />
+      <PocButton title="+1" onPress={() => { incrementCounter({ variables: { id: 1 } }); }} />
     </View>
   );
 }

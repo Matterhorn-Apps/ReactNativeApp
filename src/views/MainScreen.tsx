@@ -34,8 +34,8 @@ export default function MainScreen() {
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  const { data: exercises, refetch: refetchExercises } = useGetExerciseRecords({ userId, queryParams: { endDateTime: tomorrow.toISOString(), startDateTime: '0000-00-00 00:00:00' } });
-  const { mutate: postExercise } = usePostExerciseRecord({ userId });
+  // const { data: exercises, refetch: refetchExercises } = useGetExerciseRecords({ userId, queryParams: { endDateTime: tomorrow.toISOString(), startDateTime: '0000-00-00 00:00:00' } });
+  // const { mutate: postExercise } = usePostExerciseRecord({ userId });
 
   const submitExercise = async () => {
     const timestamp = new Date();
@@ -59,7 +59,7 @@ export default function MainScreen() {
       <PocPrompt />
 
       <ScrollView>
-        {exercises && exercises.map((exercise) => (
+        {/* {exercises && exercises.map((exercise) => (
           <View key={exercise.timestamp}>
             <Text>{exercise.label}</Text>
             <Text>{exercise.calories}</Text>
@@ -75,7 +75,7 @@ export default function MainScreen() {
             value={exerciseCalories}
           />
           <PocButton title="Submit new exercise" onPress={() => submitExercise()} />
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );

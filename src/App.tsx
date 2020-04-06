@@ -4,6 +4,8 @@ import { RestfulProvider } from 'restful-react';
 import { registerRootComponent } from 'expo';
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { ApolloProvider } from '@apollo/react-hooks';
+import ApolloClient from 'apollo-boost';
 import CounterScreen from './views/CounterScreen';
 import MainScreen from './views/MainScreen';
 import getEnvVars from './utils/environment';
@@ -23,8 +25,12 @@ type RootNavParamList = {
 const Tab = createMaterialTopTabNavigator<RootNavParamList>();
 
 function App() {
+  const client = new ApolloClient({
+    uri: `${apiUrl}/query`
+  });
+
   return (
-    <RestfulProvider base={apiUrl}>
+    <ApolloProvider client={client}>
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="Main"
@@ -46,7 +52,7 @@ function App() {
           />
         </Tab.Navigator>
       </NavigationContainer>
-    </RestfulProvider>
+    </ApolloProvider>
   );
 }
 
