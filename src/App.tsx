@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import { AuthSession, AppLoading, registerRootComponent } from 'expo';
 import { NavigationContainer } from '@react-navigation/native';
@@ -7,13 +8,25 @@ import { Spinner, View } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useFonts } from '@use-expo/font';
 
+=======
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { RestfulProvider } from 'restful-react';
+import { registerRootComponent } from 'expo';
+
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+>>>>>>> master
 import CounterScreen from './views/CounterScreen';
 import MainScreen from './views/MainScreen';
 import getEnvVars from './utils/environment';
 
+<<<<<<< HEAD
 const {
   apiUrl, auth0ClientId, auth0Domain, enableAuth
 } = getEnvVars();
+=======
+const { apiUrl } = getEnvVars();
+>>>>>>> master
 
 /**
  * To type check our route name and params, we need to create an object type
@@ -25,6 +38,10 @@ type RootNavParamList = {
   Counter: undefined;
 };
 
+<<<<<<< HEAD
+=======
+const Tab = createMaterialTopTabNavigator<RootNavParamList>();
+>>>>>>> master
 
 function App() {
   const [userToken, setUserToken] = useState<string>(enableAuth ? null : 'FAKE_TOKEN');
