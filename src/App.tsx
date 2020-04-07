@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
-import { AuthSession, AppLoading, registerRootComponent } from 'expo';
+import { AppLoading, registerRootComponent } from 'expo';
 import { NavigationContainer } from '@react-navigation/native';
 import { RestfulProvider } from 'restful-react';
 
@@ -8,25 +7,15 @@ import { Spinner, View } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useFonts } from '@use-expo/font';
 
-=======
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { RestfulProvider } from 'restful-react';
-import { registerRootComponent } from 'expo';
-
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
->>>>>>> master
 import CounterScreen from './views/CounterScreen';
 import MainScreen from './views/MainScreen';
 import getEnvVars from './utils/environment';
+import Auth, { User } from './utils/auth/auth';
+import UserScreen from './views/UserScreen';
 
-<<<<<<< HEAD
 const {
   apiUrl, auth0ClientId, auth0Domain, enableAuth
 } = getEnvVars();
-=======
-const { apiUrl } = getEnvVars();
->>>>>>> master
 
 /**
  * To type check our route name and params, we need to create an object type
@@ -38,13 +27,8 @@ type RootNavParamList = {
   Counter: undefined;
 };
 
-<<<<<<< HEAD
-=======
-const Tab = createMaterialTopTabNavigator<RootNavParamList>();
->>>>>>> master
-
 function App() {
-  const [userToken, setUserToken] = useState<string>(enableAuth ? null : 'FAKE_TOKEN');
+  const [user, setUser] = useState<User>(undefined);
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
 
   const [fontsLoaded] = useFonts({
@@ -54,13 +38,7 @@ function App() {
 
   const signIn = async () => {
     setIsLoggingIn(true);
-    const redirectUrl = encodeURIComponent(AuthSession.getRedirectUrl());
-    console.log(redirectUrl);
-    const authUrl = `${auth0Domain}/authorize?response_type=token&client_id=${auth0ClientId}&redirect_uri=${redirectUrl}&prompt=login`;
-    console.log(authUrl);
-    const result: any = await AuthSession.startAsync({ authUrl });
-    console.log(result);
-    setUserToken(result.params.access_token);
+    setUser(await Auth.SignInAsync());
     setIsLoggingIn(false);
   };
 
@@ -68,7 +46,7 @@ function App() {
     // Wait until font resources are loaded before redirecting to sign in.
     // This helps avoid incorrect behavior when triggering the auth flow before
     // AppState has initialized. (https://github.com/expo/expo/pull/6743)
-    if (fontsLoaded && !isLoggingIn && userToken === null) {
+    if (fontsLoaded && !isLoggingIn && !user) {
       signIn();
     }
   });
@@ -79,7 +57,7 @@ function App() {
     return <AppLoading />;
   }
 
-  if (userToken === null) {
+  if (!user) {
     return (
       <View>
         <Spinner />
@@ -108,6 +86,12 @@ function App() {
             component={CounterScreen}
             options={{ title: 'Counter' }}
           />
+          <Tab.Screen
+            name="User"
+            options={{ title: 'User' }}
+          >
+            {() => <UserScreen user={user} />}
+          </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
     </RestfulProvider>
