@@ -8,10 +8,10 @@ import Constants from 'expo-constants';
 
 const ENV = {
   dev: {
-    apiUrl: 'http://1faf98f0.ngrok.io',
+    apiUrl: 'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com',
     auth0ClientId: '0ngrMLtiiqOeY7ADbMSOq71tYb50LiUc',
     auth0Domain: 'https://matterhorn-prototype.auth0.com',
-    enableAuth: true,
+    enableAuth: false,
     message: 'Hello, dev!'
   },
   staging: {
