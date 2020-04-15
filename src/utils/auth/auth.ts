@@ -44,9 +44,21 @@ export default class Auth {
    * Authenticates with Auth0 and returns an access token
    */
   private static async AuthenticateAsync(): Promise<string> {
-    const redirectUrl = encodeURIComponent(AuthSession.getRedirectUrl());
-    const authUrl = `${auth0Domain}/authorize?response_type=token&client_id=${auth0ClientId}&redirect_uri=${redirectUrl}&prompt=login&scope=openid%20profile`;
+    const redirectUrl = AuthSession.getRedirectUrl();
+    const authQueryParams: any = {
+      response_type: 'token',
+      client_id: auth0ClientId,
+      redirect_uri: redirectUrl,
+      prompt: 'login',
+      scope: 'openid profile',
+      audience: 'matterhorn-api'
+    };
+    const authQueryParamString = Object.keys(authQueryParams)
+      .map((k: string) => `${encodeURIComponent(k)}=${encodeURIComponent(authQueryParams[k])}`)
+      .join('&');
+    const authUrl = `${auth0Domain}/authorize?${authQueryParamString}`;
     const result: any = await AuthSession.startAsync({ authUrl });
+    console.log(result);
     return result.params.access_token;
   }
 

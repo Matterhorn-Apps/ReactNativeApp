@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { AppLoading, registerRootComponent } from 'expo';
 import { NavigationContainer } from '@react-navigation/native';
-import { RestfulProvider } from 'restful-react';
 
 import { Spinner, View } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useFonts } from '@use-expo/font';
 
-import CounterScreen from './views/CounterScreen';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from '@apollo/react-hooks';
 import MainScreen from './views/MainScreen';
 import getEnvVars from './utils/environment';
 import Auth, { User } from './utils/auth/auth';
 import UserScreen from './views/UserScreen';
 
-const {
-  apiUrl, auth0ClientId, auth0Domain, enableAuth
-} = getEnvVars();
+const { apiUrl } = getEnvVars();
 
 /**
  * To type check our route name and params, we need to create an object type
@@ -24,7 +22,7 @@ const {
  */
 type RootNavParamList = {
   Main: undefined;
-  Counter: undefined;
+  User: undefined;
 };
 
 function App() {
@@ -65,8 +63,21 @@ function App() {
     );
   }
 
+  const apolloClient = new ApolloClient({
+    uri: `${apiUrl}/query`,
+    request: (operation) => {
+      const token = user.AccessToken;
+      console.log(`Setting context with token: ${token}`);
+      operation.setContext({
+        headers: {
+          Authorization: token ? `Bearer ${token}` : ''
+        }
+      });
+    }
+  });
+
   return (
-    <RestfulProvider base={apiUrl}>
+    <ApolloProvider client={apolloClient}>
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="Main"
@@ -82,11 +93,6 @@ function App() {
             options={{ title: 'Main' }}
           />
           <Tab.Screen
-            name="Counter"
-            component={CounterScreen}
-            options={{ title: 'Counter' }}
-          />
-          <Tab.Screen
             name="User"
             options={{ title: 'User' }}
           >
@@ -94,7 +100,7 @@ function App() {
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
-    </RestfulProvider>
+    </ApolloProvider>
   );
 }
 
