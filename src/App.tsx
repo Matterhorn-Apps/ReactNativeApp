@@ -1,16 +1,23 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import { AppLoading, registerRootComponent } from 'expo';
 import { NavigationContainer } from '@react-navigation/native';
 import { RestfulProvider } from 'restful-react';
-import { registerRootComponent } from 'expo';
 
+import { Spinner, View } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
 import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory';
+import { useFonts } from '@use-expo/font';
+
 import MainScreen from './views/MainScreen';
 import getEnvVars from './utils/environment';
+import Auth, { User } from './utils/auth/auth';
+import UserScreen from './views/UserScreen';
 
-const { apiUrl } = getEnvVars();
+const {
+  apiUrl, auth0ClientId, auth0Domain, enableAuth
+} = getEnvVars();
 
 /**
  * To type check our route name and params, we need to create an object type
@@ -19,16 +26,51 @@ const { apiUrl } = getEnvVars();
  */
 type RootNavParamList = {
   Main: undefined;
-  Counter: undefined;
+  User: undefined;
 };
-
-const Tab = createMaterialTopTabNavigator<RootNavParamList>();
 
 function App() {
   const client = new ApolloClient({
     uri: `${apiUrl}/query`,
     cache: new InMemoryCache()
   });
+
+  const [user, setUser] = useState<User>(undefined);
+  const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
+
+  const [fontsLoaded] = useFonts({
+    Roboto: require('native-base/Fonts/Roboto.ttf'),
+    Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf')
+  });
+
+  const signIn = async () => {
+    setIsLoggingIn(true);
+    setUser(await Auth.SignInAsync());
+    setIsLoggingIn(false);
+  };
+
+  useEffect(() => {
+    // Wait until font resources are loaded before redirecting to sign in.
+    // This helps avoid incorrect behavior when triggering the auth flow before
+    // AppState has initialized. (https://github.com/expo/expo/pull/6743)
+    if (fontsLoaded && !isLoggingIn && !user) {
+      signIn();
+    }
+  });
+
+  const Tab = createMaterialTopTabNavigator<RootNavParamList>();
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
+  if (!user) {
+    return (
+      <View>
+        <Spinner />
+      </View>
+    );
+  }
 
   return (
     <ApolloProvider client={client}>
@@ -46,11 +88,12 @@ function App() {
             component={MainScreen}
             options={{ title: 'Main' }}
           />
-          {/* <Tab.Screen
-            name="Counter"
-            component={CounterScreen}
-            options={{ title: 'Counter' }}
-          /> */}
+          <Tab.Screen
+            name="User"
+            options={{ title: 'User' }}
+          >
+            {() => <UserScreen user={user} />}
+          </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
     </ApolloProvider>
