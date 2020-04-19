@@ -2,13 +2,17 @@ import {
   StyleSheet, View, Text, TextInput, ScrollView
 } from 'react-native';
 import React, { useState } from 'react';
-import {
-  ExerciseRecord, usePostExerciseRecord, useGetExerciseRecords
-} from '../api-client/api-client';
+
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import PocButton from '../components/PocButton';
 import PocPrompt from '../components/PocPrompt';
 
 import getEnvVars from '../utils/environment';
+import {
+  QueryUserArgs, User, GetExercisesQueryVariables, GetExercisesQuery, AddExerciseMutation, AddExerciseMutationVariables, NewExerciseRecord
+} from '../types';
+
+import { GET_EXERCISE_DATA, ADD_EXERCISE_DATA } from '../queries/exercise';
 
 const { message } = getEnvVars();
 
@@ -27,39 +31,57 @@ const styles = StyleSheet.create({
   }
 });
 
+
 export default function MainScreen() {
   const userId = 1;
-  const [exerciseLabel, exerciseLabelUpdate] = useState('My exercise');
-  const [exerciseCalories, exerciseCaloriesUpdate] = useState('100');
+  const [exerciseLabel, setExerciseLabel] = useState('');
+  const [exerciseCalories, setExerciseCalories] = useState('0');
+
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  // const { data: exercises, refetch: refetchExercises } = useGetExerciseRecords({ userId, queryParams: { endDateTime: tomorrow.toISOString(), startDateTime: '0000-00-00 00:00:00' } });
-  // const { mutate: postExercise } = usePostExerciseRecord({ userId });
+  tomorrow.setUTCHours(0);
+  tomorrow.setUTCMinutes(0);
+  tomorrow.setUTCSeconds(0);
+  tomorrow.setUTCMilliseconds(0);
 
-  const submitExercise = async () => {
-    const timestamp = new Date();
+  // Get the ISO string and massage it into the format expected by the server (remove T separator between date and
+  // time, and remove fractional milliseconds and the timezone indicator)
+  const tomorrowString = tomorrow.toISOString().replace('T', ' ').slice(0, -5);
 
-    const exercise: ExerciseRecord = {
-      calories: parseInt(exerciseCalories, 10),
-      label: exerciseLabel,
-      timestamp: timestamp.toISOString()
-    };
+  const { loading, data: exerciseList } = useQuery<GetExercisesQuery, GetExercisesQueryVariables>(GET_EXERCISE_DATA, { variables: { endTime: tomorrowString, startTime: '0000-00-00 00:00:00' } });
 
-    await postExercise(exercise);
-    exerciseLabelUpdate('My exercise');
-    exerciseCaloriesUpdate('100');
-    refetchExercises();
+  const [addExercise] = useMutation<AddExerciseMutation, AddExerciseMutationVariables>(ADD_EXERCISE_DATA, {
+    variables: { input: { userId: '1', label: exerciseLabel, calories: parseInt(exerciseCalories, 10) } },
+    update(cache, { data: newExerciseRecord }) {
+      const { user } = cache.readQuery<GetExercisesQuery, GetExercisesQueryVariables>({ query: GET_EXERCISE_DATA, variables: { endTime: tomorrowString, startTime: '0000-00-00 00:00:00' } });
+      user.exerciseRecords.push(newExerciseRecord.createExerciseRecord);
+      cache.writeQuery<GetExercisesQuery, GetExercisesQueryVariables>({
+        query: GET_EXERCISE_DATA,
+        variables: { endTime: tomorrowString, startTime: '0000-00-00 00:00:00' },
+        data: { user }
+      });
+    }
+  });
+
+  const submitExercise = () => {
+    const caloriesInt = parseInt(exerciseCalories, 10);
+    if (exerciseLabel !== '' && caloriesInt > 0) {
+      addExercise();
+    }
+
+    setExerciseCalories('0');
+    setExerciseLabel('');
   };
-
 
   return (
     <View style={styles.container}>
       <Text>{message}</Text>
+      <Text>{tomorrowString}</Text>
       <PocPrompt />
 
       <ScrollView>
-        {/* {exercises && exercises.map((exercise) => (
+        {exerciseList && exerciseList.user.exerciseRecords.map((exercise) => (
           <View key={exercise.timestamp}>
             <Text>{exercise.label}</Text>
             <Text>{exercise.calories}</Text>
@@ -68,14 +90,14 @@ export default function MainScreen() {
         ))}
 
         <View>
-          <TextInput style={styles.input} onChangeText={(text) => exerciseLabelUpdate(text)} value={exerciseLabel} />
+          <TextInput style={styles.input} onChangeText={(text) => setExerciseLabel(text)} value={exerciseLabel} />
           <TextInput
             style={styles.input}
-            onChangeText={(text) => exerciseCaloriesUpdate(text)}
+            onChangeText={(text) => setExerciseCalories(text)}
             value={exerciseCalories}
           />
           <PocButton title="Submit new exercise" onPress={() => submitExercise()} />
-        </View> */}
+        </View>
       </ScrollView>
     </View>
   );

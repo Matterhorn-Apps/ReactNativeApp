@@ -6,7 +6,7 @@ import { registerRootComponent } from 'expo';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-import CounterScreen from './views/CounterScreen';
+import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory';
 import MainScreen from './views/MainScreen';
 import getEnvVars from './utils/environment';
 
@@ -26,7 +26,8 @@ const Tab = createMaterialTopTabNavigator<RootNavParamList>();
 
 function App() {
   const client = new ApolloClient({
-    uri: `${apiUrl}/query`
+    uri: `${apiUrl}/query`,
+    cache: new InMemoryCache()
   });
 
   return (
@@ -45,11 +46,11 @@ function App() {
             component={MainScreen}
             options={{ title: 'Main' }}
           />
-          <Tab.Screen
+          {/* <Tab.Screen
             name="Counter"
             component={CounterScreen}
             options={{ title: 'Counter' }}
-          />
+          /> */}
         </Tab.Navigator>
       </NavigationContainer>
     </ApolloProvider>

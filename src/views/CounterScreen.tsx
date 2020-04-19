@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import PocButton from '../components/PocButton';
+import { QueryCounterArgs, Counter } from '../types';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,8 +16,6 @@ const styles = StyleSheet.create({
 });
 
 export default function CounterScreen() {
-  // const { data: counter, refetch: refetchCounter } = useGetCounter({});
-
   const GET_COUNTER = gql`
   query counter {
       counter(id: 1) {
@@ -35,7 +34,7 @@ export default function CounterScreen() {
     }
   `;
 
-  const { loading, data } = useQuery(GET_COUNTER);
+  const { loading, data } = useQuery<Counter, QueryCounterArgs>(GET_COUNTER);
   const [incrementCounter] = useMutation(INCREMENT_COUNTER,
     {
       update(cache, { data: { counterUpdate } }) {
@@ -51,7 +50,7 @@ export default function CounterScreen() {
       <Text>
         Counter:
         {' '}
-        { data && data.counter.value }
+        { data && data.value }
       </Text>
       <PocButton title="+1" onPress={() => { incrementCounter({ variables: { id: 1 } }); }} />
     </View>
