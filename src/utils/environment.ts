@@ -7,22 +7,32 @@
 import Constants from 'expo-constants';
 
 const ENV = {
+  local: {
+    apiUrl: 'http://097ab81b.ngrok.io',
+    auth0ClientId: '0ngrMLtiiqOeY7ADbMSOq71tYb50LiUc',
+    auth0Domain: 'https://matterhorn-prototype.auth0.com',
+    enableAuth: false,
+    message: 'Hello, local!'
+  },
   dev: {
-    apiUrl: 'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com',
+    apiUrl:
+      'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com',
     auth0ClientId: '0ngrMLtiiqOeY7ADbMSOq71tYb50LiUc',
     auth0Domain: 'https://matterhorn-prototype.auth0.com',
     enableAuth: false,
     message: 'Hello, dev!'
   },
   staging: {
-    apiUrl: 'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com',
+    apiUrl:
+      'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com',
     auth0ClientId: '0ngrMLtiiqOeY7ADbMSOq71tYb50LiUc',
     auth0Domain: 'https://matterhorn-prototype.auth0.com',
     enableAuth: true,
     message: 'Hello, staging!'
   },
   prod: {
-    apiUrl: 'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com',
+    apiUrl:
+      'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com',
     auth0ClientId: '0ngrMLtiiqOeY7ADbMSOq71tYb50LiUc',
     auth0Domain: 'https://matterhorn-prototype.auth0.com',
     enableAuth: true,
@@ -33,10 +43,15 @@ const ENV = {
 const getEnvVars = (env = Constants.manifest.releaseChannel) => {
   // __DEV__ is true when run locally, but false when published.
   if (__DEV__) {
+    return ENV.local;
+  }
+  if (env === 'dev') {
     return ENV.dev;
-  } if (env === 'staging') {
+  }
+  if (env === 'staging') {
     return ENV.staging;
-  } if (env === 'prod') {
+  }
+  if (env === 'prod') {
     return ENV.prod;
   }
 

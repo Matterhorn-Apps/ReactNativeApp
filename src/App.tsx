@@ -14,9 +14,7 @@ import getEnvVars from './utils/environment';
 import Auth, { User } from './utils/auth/auth';
 import UserScreen from './views/UserScreen';
 
-const {
-  apiUrl, auth0ClientId, auth0Domain, enableAuth
-} = getEnvVars();
+const { apiUrl } = getEnvVars();
 
 /**
  * To type check our route name and params, we need to create an object type

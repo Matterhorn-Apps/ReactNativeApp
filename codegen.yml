@@ -1,5 +1,5 @@
 schema: data/schema.graphql
-documents: ./src/**/MainScreen.tsx
+documents: ./src/queries/*.ts
 namingConvention: keep
 generates:
   ./src/types.ts:
