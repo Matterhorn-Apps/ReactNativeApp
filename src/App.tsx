@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { AppLoading, registerRootComponent } from 'expo';
 import { NavigationContainer } from '@react-navigation/native';
-import { RestfulProvider } from 'restful-react';
 
 import { Spinner, View } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { useFonts } from '@use-expo/font';
 
 import MainScreen from './views/MainScreen';
