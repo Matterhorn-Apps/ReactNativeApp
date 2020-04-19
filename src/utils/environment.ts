@@ -16,7 +16,7 @@ const ENV = {
   },
   dev: {
     apiUrl:
-      'http://matterhornapiservice-env.eba-qjezc5kq.us-east-1.elasticbeanstalk.com',
+      'http://matterhornapiservice-env-dev.eba-qjezc5kq.us-east-1.elasticbeanstalk.com/',
     auth0ClientId: '0ngrMLtiiqOeY7ADbMSOq71tYb50LiUc',
     auth0Domain: 'https://matterhorn-prototype.auth0.com',
     enableAuth: false,

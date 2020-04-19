@@ -31,13 +31,11 @@ const styles = StyleSheet.create({
   }
 });
 
+// Gets a string representation of tomorrow's date in the format 'yyyy-mm-dd hh:mm:ss'. There is no native way
+// to get such a string in JS, so we have to manipulate the string a bit
 const getTomorrowString = (): string => {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  tomorrow.setUTCHours(0);
-  tomorrow.setUTCMinutes(0);
-  tomorrow.setUTCSeconds(0);
-  tomorrow.setUTCMilliseconds(0);
 
   // Get the ISO string and massage it into the format expected by the server (remove T separator between date and
   // time, and remove fractional milliseconds and the timezone indicator)
@@ -54,20 +52,13 @@ export default function MainScreen() {
   const today = new Date().getUTCDate();
   const endTime = useMemo(() => getTomorrowString(), [today]);
 
-  const { data: exerciseList } = useQuery<GetExercisesQuery, GetExercisesQueryVariables>(GET_EXERCISE_DATA, {
+  const { data: exerciseQueryResponse } = useQuery<GetExercisesQuery, GetExercisesQueryVariables>(GET_EXERCISE_DATA, {
     variables: {
       endTime, startTime
     }
   });
 
   const [addExercise] = useMutation<AddExerciseMutation, AddExerciseMutationVariables>(ADD_EXERCISE_DATA, {
-    variables: {
-      input: {
-        userId: '1',
-        label: exerciseLabel,
-        calories: parseInt(exerciseCalories, 10)
-      }
-    },
     update(cache, { data: newExerciseRecord }) {
       // Read all exercises from local cache
       const { user } = cache.readQuery<GetExercisesQuery, GetExercisesQueryVariables>({
@@ -75,7 +66,7 @@ export default function MainScreen() {
         variables: { endTime, startTime }
       });
 
-      // Add new exercise to this locally cached list and write it back to the cache
+      // Add new exercise to the retrieved list and write it back to the cache
       user.exerciseRecords.push(newExerciseRecord.createExerciseRecord);
       cache.writeQuery<GetExercisesQuery, GetExercisesQueryVariables>({
         query: GET_EXERCISE_DATA,
@@ -86,9 +77,18 @@ export default function MainScreen() {
   });
 
   const submitExercise = (): void => {
-    const caloriesInt = parseInt(exerciseCalories, 10);
+    const radix = 10;
+    const caloriesInt = parseInt(exerciseCalories, radix);
     if (exerciseLabel !== '' && caloriesInt > 0) {
-      addExercise();
+      addExercise({
+        variables: {
+          input: {
+            userId: '1',
+            label: exerciseLabel,
+            calories: parseInt(exerciseCalories, 10)
+          }
+        }
+      });
     }
 
     setExerciseCalories('0');
@@ -101,7 +101,7 @@ export default function MainScreen() {
       <PocPrompt />
 
       <ScrollView>
-        {exerciseList && exerciseList.user.exerciseRecords.map((exercise) => (
+        {exerciseQueryResponse && exerciseQueryResponse.user.exerciseRecords.map((exercise) => (
           <View key={exercise.timestamp}>
             <Text>{exercise.label}</Text>
             <Text>{exercise.calories}</Text>
