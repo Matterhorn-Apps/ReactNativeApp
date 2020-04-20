@@ -7,7 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "build": "tsc --project tsconfig.json",
-    "generate-api-client": "restful-react import --url https://raw.githubusercontent.com/Matterhorn-Apps/MatterhornApiSpec/master/specs/0.1.0.yaml --output src/api-client/api-client.tsx",
+    "generate-graphql-types": "graphql-codegen",
     "lint": "eslint src/* --ext .js,.jsx,.ts,.tsx  --fix",
     "test": "jest"
   },
@@ -17,6 +17,9 @@
     "@react-navigation/material-top-tabs": "^5.1.7",
     "@react-navigation/native": "^5.1.4",
     "@react-navigation/stack": "^5.2.9",
+    "apollo-boost": "^0.4.7",
+    "apollo-cache-inmemory": "1.6.5",
+    "graphql": "^15.0.0",
     "@use-expo/font": "^1.0.1",
     "apollo-boost": "^0.4.7",
     "expo": "~36.0.0",
@@ -36,6 +39,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
+    "@graphql-codegen/cli": "^1.13.2",
+    "@graphql-codegen/typescript": "^1.13.2",
+    "@graphql-codegen/typescript-operations": "^1.13.2",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.2",
     "@types/react": "~16.9.0",

@@ -58,7 +58,6 @@ export default class Auth {
       .join('&');
     const authUrl = `${auth0Domain}/authorize?${authQueryParamString}`;
     const result: any = await AuthSession.startAsync({ authUrl });
-    console.log(result);
     return result.params.access_token;
   }
 

@@ -4,10 +4,11 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { Spinner, View } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { ApolloProvider } from '@apollo/react-hooks';
+import ApolloClient from 'apollo-boost';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { useFonts } from '@use-expo/font';
 
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from '@apollo/react-hooks';
 import MainScreen from './views/MainScreen';
 import getEnvVars from './utils/environment';
 import Auth, { User } from './utils/auth/auth';
@@ -26,6 +27,11 @@ type RootNavParamList = {
 };
 
 function App() {
+  const client = new ApolloClient({
+    uri: `${apiUrl}/query`,
+    cache: new InMemoryCache()
+  });
+
   const [user, setUser] = useState<User>(undefined);
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
 
