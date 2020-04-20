@@ -53,8 +53,8 @@ export default class Auth {
       scope: 'openid profile',
       audience: 'matterhorn-api'
     };
-    const authQueryParamString = Object.keys(authQueryParams)
-      .map((k: string) => `${encodeURIComponent(k)}=${encodeURIComponent(authQueryParams[k])}`)
+    const authQueryParamString = Object.entries<string>(authQueryParams)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
       .join('&');
     const authUrl = `${auth0Domain}/authorize?${authQueryParamString}`;
     const result: any = await AuthSession.startAsync({ authUrl });

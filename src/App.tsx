@@ -67,7 +67,6 @@ function App() {
     uri: `${apiUrl}/query`,
     request: (operation) => {
       const token = user.AccessToken;
-      console.log(`Setting context with token: ${token}`);
       operation.setContext({
         headers: {
           Authorization: token ? `Bearer ${token}` : ''

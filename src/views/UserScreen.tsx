@@ -20,13 +20,7 @@ export default function UserScreen(props: UserScreenProps) {
       headers: {
         Authorization: `Bearer ${user.AccessToken}`
       }
-    },
-    onError: ((error: any) => {
-      console.log(error);
-    }),
-    onCompleted: ((response: any) => {
-      console.log(response);
-    })
+    }
   });
 
   if (!user) {
