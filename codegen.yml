@@ -1,0 +1,9 @@
+# TODO reference the checked-in schema, instead of this local copy
+schema: data/schema.graphql
+documents: ./src/queries/*.ts
+namingConvention: keep
+generates:
+  ./src/types.ts:
+    plugins:
+      - typescript
+      - typescript-operations

@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { AppLoading, registerRootComponent } from 'expo';
 import { NavigationContainer } from '@react-navigation/native';
-import { RestfulProvider } from 'restful-react';
 
 import { Spinner, View } from 'native-base';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { ApolloProvider } from '@apollo/react-hooks';
+import ApolloClient from 'apollo-boost';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { useFonts } from '@use-expo/font';
 
-import CounterScreen from './views/CounterScreen';
 import MainScreen from './views/MainScreen';
 import getEnvVars from './utils/environment';
 import Auth, { User } from './utils/auth/auth';
 import UserScreen from './views/UserScreen';
 
-const {
-  apiUrl, auth0ClientId, auth0Domain, enableAuth
-} = getEnvVars();
+const { apiUrl } = getEnvVars();
 
 /**
  * To type check our route name and params, we need to create an object type
@@ -24,10 +23,15 @@ const {
  */
 type RootNavParamList = {
   Main: undefined;
-  Counter: undefined;
+  User: undefined;
 };
 
 function App() {
+  const client = new ApolloClient({
+    uri: `${apiUrl}/query`,
+    cache: new InMemoryCache()
+  });
+
   const [user, setUser] = useState<User>(undefined);
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
 
@@ -66,7 +70,7 @@ function App() {
   }
 
   return (
-    <RestfulProvider base={apiUrl}>
+    <ApolloProvider client={client}>
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="Main"
@@ -82,11 +86,6 @@ function App() {
             options={{ title: 'Main' }}
           />
           <Tab.Screen
-            name="Counter"
-            component={CounterScreen}
-            options={{ title: 'Counter' }}
-          />
-          <Tab.Screen
             name="User"
             options={{ title: 'User' }}
           >
@@ -94,7 +93,7 @@ function App() {
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
-    </RestfulProvider>
+    </ApolloProvider>
   );
 }
 
