@@ -4,6 +4,7 @@ import {
   Card, CardItem, Body, Text, Thumbnail, Left, Spinner, Button
 } from 'native-base';
 import { useQuery } from '@apollo/react-hooks';
+import { ApolloError } from 'apollo-boost';
 import { User } from '../utils/auth/auth';
 import { ME_QUERY } from '../utils/queries';
 
@@ -16,10 +17,8 @@ export default function UserScreen(props: UserScreenProps) {
 
   const { data, loading, refetch } = useQuery(ME_QUERY, {
     notifyOnNetworkStatusChange: true,
-    context: {
-      headers: {
-        Authorization: `Bearer ${user.AccessToken}`
-      }
+    onCompleted: (completedData: any) => {
+      console.log(completedData);
     }
   });
 

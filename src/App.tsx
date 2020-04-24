@@ -27,11 +27,6 @@ type RootNavParamList = {
 };
 
 function App() {
-  const client = new ApolloClient({
-    uri: `${apiUrl}/query`,
-    cache: new InMemoryCache()
-  });
-
   const [user, setUser] = useState<User>(undefined);
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
 
@@ -71,8 +66,19 @@ function App() {
 
   const apolloClient = new ApolloClient({
     uri: `${apiUrl}/query`,
+    cache: new InMemoryCache(),
+    onError: ({ graphQLErrors, networkError, response }) => {
+      if (networkError) {
+        console.error((networkError as any).bodyText);
+      }
+
+      if (graphQLErrors) {
+        graphQLErrors.map(({ message, path }) => console.error(`[GraphQL error]: Message: ${message}, Operation: ${operation.operationName}, Path: ${path}`));
+      }
+    },
     request: (operation) => {
       const token = user.AccessToken;
+      console.log(token);
       operation.setContext({
         headers: {
           Authorization: token ? `Bearer ${token}` : ''
