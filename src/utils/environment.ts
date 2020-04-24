@@ -7,13 +7,6 @@
 import Constants from 'expo-constants';
 
 const ENV = {
-  local: {
-    apiUrl: 'http://matterhornapiservice-env-dev.eba-qjezc5kq.us-east-1.elasticbeanstalk.com/',
-    auth0ClientId: '0ngrMLtiiqOeY7ADbMSOq71tYb50LiUc',
-    auth0Domain: 'https://matterhorn-prototype.auth0.com',
-    enableAuth: false,
-    message: 'Hello, local!'
-  },
   dev: {
     apiUrl:
       'http://matterhornapiservice-env-dev.eba-qjezc5kq.us-east-1.elasticbeanstalk.com/',
@@ -43,7 +36,7 @@ const ENV = {
 const getEnvVars = (env = Constants.manifest.releaseChannel) => {
   // __DEV__ is true when run locally, but false when published.
   if (__DEV__) {
-    return ENV.local;
+    return ENV.dev;
   }
   if (env === 'dev') {
     return ENV.dev;
