@@ -67,13 +67,9 @@ function App() {
   const apolloClient = new ApolloClient({
     uri: `${apiUrl}/query`,
     cache: new InMemoryCache(),
-    onError: ({ graphQLErrors, networkError, response }) => {
+    onError: ({ networkError }) => {
       if (networkError) {
         console.error((networkError as any).bodyText);
-      }
-
-      if (graphQLErrors) {
-        graphQLErrors.map(({ message, path }) => console.error(`[GraphQL error]: Message: ${message}, Operation: ${operation.operationName}, Path: ${path}`));
       }
     },
     request: (operation) => {

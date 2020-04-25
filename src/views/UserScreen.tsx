@@ -1,10 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 import {
-  Card, CardItem, Body, Text, Thumbnail, Left, Spinner, Button
+  Card, CardItem, Body, Text, Spinner, Button
 } from 'native-base';
 import { useQuery } from '@apollo/react-hooks';
-import { ApolloError } from 'apollo-boost';
 import { User } from '../utils/auth/auth';
 import { ME_QUERY } from '../utils/queries';
 
@@ -12,7 +11,7 @@ export interface UserScreenProps {
   user: User;
 }
 
-export default function UserScreen(props: UserScreenProps) {
+export default function UserScreen(props: UserScreenProps): JSX.Element {
   const { user } = props;
 
   const { data, loading, refetch } = useQuery(ME_QUERY, {
