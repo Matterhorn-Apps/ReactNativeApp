@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import {
   Card, CardItem, Body, Text, Spinner, Button
@@ -21,6 +21,10 @@ export default function UserScreen(props: UserScreenProps): JSX.Element {
     }
   });
 
+  const onButtonPress = useCallback(() => {
+    refetch();
+  }, [refetch]);
+
   if (!user) {
     return (
       <View>
@@ -41,7 +45,7 @@ export default function UserScreen(props: UserScreenProps): JSX.Element {
     return (
       <View>
         <Text>Data failed to load.</Text>
-        <Button onPress={() => refetch()}><Text>Try again</Text></Button>
+        <Button onPress={onButtonPress}><Text>Try again</Text></Button>
       </View>
     );
   }
