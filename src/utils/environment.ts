@@ -51,7 +51,7 @@ const ENV: { [key: string]: Environment } = {
 const getEnvVars = (env = Constants.manifest.releaseChannel): Environment => {
   // __DEV__ is true when run locally, but false when published.
   if (__DEV__) {
-    return ENV.local;
+    return ENV.dev;
   }
   if (env === 'dev') {
     return ENV.dev;
