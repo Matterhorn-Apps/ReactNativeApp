@@ -1,8 +1,16 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { AuthSession } from 'expo';
 
 import getEnvVars from '../environment';
 
 const { auth0ClientId, auth0Domain, enableAuth } = getEnvVars();
+
+interface UserProfile {
+  sub: string;
+  name: string;
+  nickname: string;
+  picture: string;
+}
 
 export interface User {
   AccessToken: string;
@@ -37,15 +45,13 @@ export default class Auth {
     };
   }
 
-  public static SignOut() {
-  }
-
   /**
    * Authenticates with Auth0 and returns an access token
    */
   private static async AuthenticateAsync(): Promise<string> {
-    const redirectUrl = AuthSession.getRedirectUrl();
-    const authQueryParams: any = {
+    const redirectUrl = encodeURIComponent(AuthSession.getRedirectUrl());
+
+    const authQueryParams = {
       response_type: 'token',
       client_id: auth0ClientId,
       redirect_uri: redirectUrl,
@@ -61,7 +67,7 @@ export default class Auth {
     return result.params.access_token;
   }
 
-  private static async GetUserProfileAsync(accessToken: string): Promise<any> {
+  private static async GetUserProfileAsync(accessToken: string): Promise<UserProfile> {
     const userProfileUrl = `${auth0Domain}/userinfo?access_token=${accessToken}`;
     const response = await fetch(userProfileUrl);
     return response.json();

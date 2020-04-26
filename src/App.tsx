@@ -26,16 +26,19 @@ type RootNavParamList = {
   User: undefined;
 };
 
-function App() {
+function App(): JSX.Element {
   const [user, setUser] = useState<User>(undefined);
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
 
+  // Load custom fonts required by native-base
+  // https://docs.expo.io/guides/using-custom-fonts/
   const [fontsLoaded] = useFonts({
     Roboto: require('native-base/Fonts/Roboto.ttf'),
+    // eslint-disable-next-line @typescript-eslint/camelcase
     Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf')
   });
 
-  const signIn = async () => {
+  const signIn = async (): Promise<void> => {
     setIsLoggingIn(true);
     setUser(await Auth.SignInAsync());
     setIsLoggingIn(false);
@@ -103,7 +106,7 @@ function App() {
             name="User"
             options={{ title: 'User' }}
           >
-            {() => <UserScreen user={user} />}
+            {(): JSX.Element => <UserScreen user={user} />}
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>

@@ -6,7 +6,15 @@
 
 import Constants from 'expo-constants';
 
-const ENV = {
+export interface Environment {
+  apiUrl: string;
+  auth0ClientId: string;
+  auth0Domain: string;
+  enableAuth: boolean;
+  message: string;
+}
+
+const ENV: { [key: string]: Environment } = {
   local: {
     apiUrl: 'http://b0aacb15.ngrok.io',
     auth0ClientId: '0ngrMLtiiqOeY7ADbMSOq71tYb50LiUc',
@@ -40,10 +48,10 @@ const ENV = {
   }
 };
 
-const getEnvVars = (env = Constants.manifest.releaseChannel) => {
+const getEnvVars = (env = Constants.manifest.releaseChannel): Environment => {
   // __DEV__ is true when run locally, but false when published.
   if (__DEV__) {
-    return ENV.local;
+    return ENV.dev;
   }
   if (env === 'dev') {
     return ENV.dev;

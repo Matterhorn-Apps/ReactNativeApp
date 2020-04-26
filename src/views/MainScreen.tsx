@@ -42,7 +42,7 @@ const getTomorrowString = (): string => {
 };
 
 
-export default function MainScreen() {
+export default function MainScreen(): JSX.Element {
   const [exerciseLabel, setExerciseLabel] = useState('');
   const [exerciseCalories, setExerciseCalories] = useState('0');
   const startTime = '0000-00-00 00:00:00';
@@ -109,13 +109,17 @@ export default function MainScreen() {
         ))}
 
         <View>
-          <TextInput style={styles.input} onChangeText={(text) => setExerciseLabel(text)} value={exerciseLabel} />
           <TextInput
             style={styles.input}
-            onChangeText={(text) => setExerciseCalories(text)}
+            onChangeText={(text: string): void => setExerciseLabel(text)}
+            value={exerciseLabel}
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={(text: string): void => setExerciseCalories(text)}
             value={exerciseCalories}
           />
-          <PocButton title="Submit new exercise" onPress={() => submitExercise()} />
+          <PocButton title="Submit new exercise" onPress={(): void => submitExercise()} />
         </View>
       </ScrollView>
     </View>

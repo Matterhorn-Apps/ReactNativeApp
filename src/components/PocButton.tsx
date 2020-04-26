@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function PocButton(props: PocButtonInterface) {
+export default function PocButton(props: PocButtonInterface): JSX.Element {
   const { onPress, title } = props;
   return (
     <View>
