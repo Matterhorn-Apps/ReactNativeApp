@@ -53,7 +53,7 @@ export default class Auth {
   private static async AuthenticateAsync(): Promise<string> {
     const redirectUrl = AuthSession.getRedirectUrl();
 
-    const authQueryParams: any = {
+    const authQueryParams: { [s: string]: string } = {
       response_type: 'token',
       client_id: auth0ClientId,
       redirect_uri: redirectUrl,
