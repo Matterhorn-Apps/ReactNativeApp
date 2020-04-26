@@ -1,10 +1,26 @@
-name: Expo Publish
+name: build
 on:
   push:
     branches:
       - master
+  pull_request:
 jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - run: yarn install
+      - run: yarn run lint
+      - run: yarn run build
+  
   publish:
+    # Only run this job on master
+    if: github.ref == 'refs/heads/master'
+
     name: Install and publish
     runs-on: ubuntu-latest
     steps:

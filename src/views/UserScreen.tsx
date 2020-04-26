@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import {
-  Card, CardItem, Body, Text, Image, Thumbnail, Left
+  Card, CardItem, Body, Text, Thumbnail, Left
 } from 'native-base';
 import { User } from '../utils/auth/auth';
 
@@ -9,7 +9,7 @@ export interface UserScreenProps {
   user: User;
 }
 
-export default function UserScreen(props: UserScreenProps) {
+export default function UserScreen(props: UserScreenProps): JSX.Element {
   const { user } = props;
 
   if (!user) {
