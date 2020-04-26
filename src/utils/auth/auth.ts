@@ -3,6 +3,8 @@ import { AuthSession } from 'expo';
 
 import getEnvVars from '../environment';
 
+import { AuthSessionResult } from '../../type-definitions/AuthSession';
+
 const { auth0ClientId, auth0Domain, enableAuth } = getEnvVars();
 
 interface UserProfile {
@@ -49,9 +51,9 @@ export default class Auth {
    * Authenticates with Auth0 and returns an access token
    */
   private static async AuthenticateAsync(): Promise<string> {
-    const redirectUrl = encodeURIComponent(AuthSession.getRedirectUrl());
+    const redirectUrl = AuthSession.getRedirectUrl();
 
-    const authQueryParams = {
+    const authQueryParams: any = {
       response_type: 'token',
       client_id: auth0ClientId,
       redirect_uri: redirectUrl,
@@ -63,8 +65,8 @@ export default class Auth {
       .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
       .join('&');
     const authUrl = `${auth0Domain}/authorize?${authQueryParamString}`;
-    const result: any = await AuthSession.startAsync({ authUrl });
-    return result.params.access_token;
+    const result: AuthSessionResult = await AuthSession.startAsync({ authUrl });
+    return result.type === 'success' ? result.params.access_token : null;
   }
 
   private static async GetUserProfileAsync(accessToken: string): Promise<UserProfile> {

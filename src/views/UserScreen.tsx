@@ -15,10 +15,7 @@ export default function UserScreen(props: UserScreenProps): JSX.Element {
   const { user } = props;
 
   const { data, loading, refetch } = useQuery(ME_QUERY, {
-    notifyOnNetworkStatusChange: true,
-    onCompleted: (completedData: any) => {
-      console.log(completedData);
-    }
+    notifyOnNetworkStatusChange: true
   });
 
   const onButtonPress = useCallback(() => {

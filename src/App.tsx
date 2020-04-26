@@ -70,12 +70,7 @@ function App(): JSX.Element {
   const apolloClient = new ApolloClient({
     uri: `${apiUrl}/query`,
     cache: new InMemoryCache(),
-    onError: ({ networkError }) => {
-      if (networkError) {
-        console.error((networkError as any).bodyText);
-      }
-    },
-    request: (operation) => {
+    request: (operation): void => {
       const token = user.AccessToken;
       console.log(token);
       operation.setContext({

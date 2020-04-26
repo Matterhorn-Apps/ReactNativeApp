@@ -15,13 +15,6 @@ export interface Environment {
 }
 
 const ENV: { [key: string]: Environment } = {
-  local: {
-    apiUrl: 'http://b0aacb15.ngrok.io',
-    auth0ClientId: '0ngrMLtiiqOeY7ADbMSOq71tYb50LiUc',
-    auth0Domain: 'https://matterhorn-prototype.auth0.com',
-    enableAuth: true,
-    message: 'Hello, local!'
-  },
   dev: {
     apiUrl:
       'http://matterhornapiservice-env-dev.eba-qjezc5kq.us-east-1.elasticbeanstalk.com',
