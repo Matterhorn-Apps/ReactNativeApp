@@ -10,7 +10,11 @@
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly",
-        "__DEV__": "readonly"
+        "__DEV__": "readonly",
+        "fetch": "readonly",
+        "describe": "readonly",
+        "it": "readonly",
+        "expect": "readonly"
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -29,16 +33,18 @@
         "import/resolver": {
             "node": {
                 "paths": ["src"],
-                "extensions": [".js", ".jsx", ".ts", ".tsx"]
+                "extensions": [".js", ".jsx", ".ts", ".tsx", ".d.ts"]
             }
         }
     },
     "rules": {
         "react/jsx-filename-extension": "off",
-        "comma-dangle":["error", "never"],
+        "comma-dangle": ["error", "never"],
+        "global-require": "off",
         "quotes":["error", "single"],
         "linebreak-style": "off",
         "import/extensions": ["off", "never"],
-        "max-len": ["error", { "code": 120 }]
+        "max-len": ["error", { "code": 120 }],
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": [ "./**/*.test.*" ] }]
     }
 }

@@ -1,3 +1,5 @@
+// TODO: Fix eslint problems or delete file
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import {
   Text, View, TextInput, TouchableWithoutFeedback, Button, StyleSheet
@@ -12,28 +14,28 @@ const styles = StyleSheet.create({
 });
 
 // TODO: Impliment api request
-const apiGetRequest = async () => 1500;
+const apiGetRequest = async (): Promise<number> => 1500;
 
 // TODO: Impliment api request
-// eslint-disable-next-line no-unused-vars
-const apiPutRequest = async (calorieGoal: number) => { };
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-empty-function
+const apiPutRequest = async (calorieGoal: number): Promise<void> => { };
 
-export default function PocPrompt() {
+export default function PocPrompt(): JSX.Element {
   // State
   const [displayPrompt, setDisplayPrompt] = useState(false);
   const [calorieGoal, setCalorieGoal] = useState<number>(undefined);
 
   // Local Functions
-  const toggleDisplayPrompt = () => {
+  const toggleDisplayPrompt = (): void => {
     setDisplayPrompt(!displayPrompt);
   };
 
-  const getGoal = async () => {
+  const getGoal = async (): Promise<void> => {
     const goal = await apiGetRequest();
     setCalorieGoal(goal);
   };
 
-  const changeGoal = async () => {
+  const changeGoal = async (): Promise<void> => {
     await apiPutRequest(calorieGoal);
     setDisplayPrompt(false);
   };
@@ -48,9 +50,14 @@ export default function PocPrompt() {
     return (
       <View style={styles.container}>
         <TouchableWithoutFeedback onPress={toggleDisplayPrompt}>
-          <TextInput placeholder="Input new calorie goal" onChangeText={(text) => setCalorieGoal(Number(text))} onSubmitEditing={() => changeGoal()} keyboardType="numeric" />
+          <TextInput
+            placeholder="Input new calorie goal"
+            onChangeText={(text: string): void => setCalorieGoal(Number(text))}
+            onSubmitEditing={(): Promise<void> => changeGoal()}
+            keyboardType="numeric"
+          />
         </TouchableWithoutFeedback>
-        <Button onPress={() => changeGoal()} title="Done" />
+        <Button onPress={changeGoal} title="Done" />
       </View>
     );
   }
