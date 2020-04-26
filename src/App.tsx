@@ -27,11 +27,6 @@ type RootNavParamList = {
 };
 
 function App(): JSX.Element {
-  const client = new ApolloClient({
-    uri: `${apiUrl}/query`,
-    cache: new InMemoryCache()
-  });
-
   const [user, setUser] = useState<User>(undefined);
   const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
 
@@ -72,8 +67,22 @@ function App(): JSX.Element {
     );
   }
 
+  const apolloClient = new ApolloClient({
+    uri: `${apiUrl}/query`,
+    cache: new InMemoryCache(),
+    request: (operation): void => {
+      const token = user.AccessToken;
+      console.log(token);
+      operation.setContext({
+        headers: {
+          Authorization: token ? `Bearer ${token}` : ''
+        }
+      });
+    }
+  });
+
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="Main"

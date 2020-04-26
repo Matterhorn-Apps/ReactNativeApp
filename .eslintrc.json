@@ -45,6 +45,7 @@
         "linebreak-style": "off",
         "import/extensions": ["off", "never"],
         "max-len": ["error", { "code": 120 }],
-        "import/no-extraneous-dependencies": ["error", { "devDependencies": [ "./**/*.test.*" ] }]
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": [ "./**/*.test.*" ] }],
+        "no-console": "off"
     }
 }

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { AuthSession } from 'expo';
-import * as querystring from 'querystring';
-import { AuthSessionResult } from '../../type-definitions/AuthSession';
 
 import getEnvVars from '../environment';
+
+import { AuthSessionResult } from '../../type-definitions/AuthSession';
 
 const { auth0ClientId, auth0Domain, enableAuth } = getEnvVars();
 
@@ -51,16 +51,20 @@ export default class Auth {
    * Authenticates with Auth0 and returns an access token
    */
   private static async AuthenticateAsync(): Promise<string> {
-    const redirectUrl = encodeURIComponent(AuthSession.getRedirectUrl());
+    const redirectUrl = AuthSession.getRedirectUrl();
 
-    const authParams = {
+    const authQueryParams: { [s: string]: string } = {
       response_type: 'token',
       client_id: auth0ClientId,
       redirect_uri: redirectUrl,
       prompt: 'login',
-      scope: 'openid profile'
+      scope: 'openid profile',
+      audience: 'matterhorn-api'
     };
-    const authUrl = `${auth0Domain}/authorize?${querystring.stringify(authParams)}`;
+    const authQueryParamString = Object.entries<string>(authQueryParams)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+    const authUrl = `${auth0Domain}/authorize?${authQueryParamString}`;
     const result: AuthSessionResult = await AuthSession.startAsync({ authUrl });
     return result.type === 'success' ? result.params.access_token : null;
   }

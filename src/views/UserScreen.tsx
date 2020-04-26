@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import {
-  Card, CardItem, Body, Text, Thumbnail, Left
+  Card, CardItem, Body, Text, Spinner, Button
 } from 'native-base';
+import { useQuery } from '@apollo/react-hooks';
 import { User } from '../utils/auth/auth';
+import { ME_QUERY } from '../utils/queries';
 
 export interface UserScreenProps {
   user: User;
@@ -11,6 +13,14 @@ export interface UserScreenProps {
 
 export default function UserScreen(props: UserScreenProps): JSX.Element {
   const { user } = props;
+
+  const { data, loading, refetch } = useQuery(ME_QUERY, {
+    notifyOnNetworkStatusChange: true
+  });
+
+  const onButtonPress = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   if (!user) {
     return (
@@ -20,31 +30,45 @@ export default function UserScreen(props: UserScreenProps): JSX.Element {
     );
   }
 
+  if (loading) {
+    return (
+      <View>
+        <Spinner />
+      </View>
+    );
+  }
+
+  if (!data) {
+    return (
+      <View>
+        <Text>Data failed to load.</Text>
+        <Button onPress={onButtonPress}><Text>Try again</Text></Button>
+      </View>
+    );
+  }
+
   return (
     <View>
       <Card>
         <CardItem>
-          <Left>
-            <Thumbnail source={{ uri: user.Picture }} />
-            <Body>
-              <Text>{user.Name}</Text>
-              <Text note>{user.Nickname}</Text>
-            </Body>
-          </Left>
-        </CardItem>
-        <CardItem>
           <Body>
             <Text>
-              {`Id: ${user.Id}`}
+              {`Id: ${data.me.id}`}
             </Text>
             <Text>
-              {`Name: ${user.Name}`}
+              {`Display Name: ${data.me.displayName}`}
             </Text>
             <Text>
-              {`Nickname: ${user.Nickname}`}
+              {`Height: ${data.me.height}`}
             </Text>
             <Text>
-              {`Access Token: ${user.AccessToken}`}
+              {`Weight: ${data.me.weight}`}
+            </Text>
+            <Text>
+              {`Sex: ${data.me.sex}`}
+            </Text>
+            <Text>
+              {`Calorie Goal: ${data.me.calorieGoal}`}
             </Text>
           </Body>
         </CardItem>

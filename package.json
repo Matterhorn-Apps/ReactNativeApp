@@ -20,10 +20,10 @@
     "@use-expo/font": "^1.0.1",
     "apollo-boost": "^0.4.7",
     "apollo-cache-inmemory": "1.6.5",
+    "graphql": "^15.0.0",
     "expo": "~36.0.0",
     "expo-constants": "~8.0.0",
     "expo-font": "~8.0.0",
-    "graphql": "^15.0.0",
     "native-base": "2.13.8",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
@@ -33,8 +33,7 @@
     "react-native-safe-area-context": "0.6.0",
     "react-native-screens": "2.0.0-alpha.12",
     "react-native-tab-view": "^2.13.0",
-    "react-native-web": "~0.11.7",
-    "restful-react": "^11.2.0"
+    "react-native-web": "~0.11.7"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
